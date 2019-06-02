@@ -1,16 +1,15 @@
-// const passport = require('passport')
-// var JwtStrategy = require('passport-jwt').Strategy, ExtractJwt = require('passport-jwt').ExtractJwt;
 
-// const LocalStrategy = require('passport-local').Strategy;
-// const GooglePlusTokenStrategy = require('passport-google-plus-token')
+// Passport authentication
+const passport = require('passport')
+// const JwtStrategy = require('passport-jwt').Strategy, ExtractJwt = require('passport-jwt').ExtractJwt;
+const LocalStrategy = require('passport-local').Strategy;
 // const JWT_SECRET  = process.env.JSON_WEB_TOKEN   
 
-// const bcrypt = require('bcryptjs');
+//Hashing and encrypting
+const bcrypt = require('bcryptjs');
 
-// const qStrings = require(".././tools/sqlStrings");
-// const query = require(".././tools/queryDatabase");
-// const dbFail = require(".././tools/dbFailSafe");
-
+//Database query
+const db = require ('./db')
 
 // //JSON web token strategy
 // passport.use(new JwtStrategy({
@@ -35,57 +34,45 @@
 //     }
 // }));
 
-// //Local strategy
-// /**
-//  * Notice, passport requires username, we will treat it either as an email or a username
-//  */
-// passport.use(new LocalStrategy({
-
-// }, async (username, password, done) => {
-//     try {
-//     //Find the user given the username
-//     const p0 = new Promise (function (resolve, reject){
-//         text = qStrings.selectViaEmailOrUsername
-//         values = [username, username]; 
-//         query(text, values, (err, result) => {
-//             if (err) reject()
-//             if (result.rowCount == 0) resolve (null)
-//             resolve (result.rows[0])
-//         });
-//     }); 
-    
-//     //Check if the password is correct
-//     p0.then(function (user){
+//Local strategy
+/**
+ * Notice, passport requires username, we will treat it either as an email or a username
+ */
+passport.use(new LocalStrategy({
+    usernameField : 'email'
+}, async (email, password, done) => {
+    try {
+        //Find the user given the username
+        const sql = 'select * from user where lower(email) = ?;'
+        const values = [email]
         
-//         //case the user does not exist
-//         if (!user) return (null, false);
+        let result = await db.query(sql, values)
+        if (result.length < 1) return done (null, false)
+        const db_user = result[0]
+        db_user.password = db_user.password.toString('utf8')
 
-//         //check if the passwords match
-//         isMatch = bcrypt.compare(password, user.password_hash)
-//         if (!isMatch)
-//             throw new Error ('Passwords did not match')
-        
-//         delete user.password_hash    
-//         return done(null, user)
-        
-//     }).catch(function () {
-//         throw new Error ('Database Query Error')
-//     })
+        //Check if the password is correct
+        bcrypt.compare(password, db_user.password, function (err, res) {
 
-//     //If not handle it
-//     } catch (error){
-//         return done(error, false)
-//     }
+            if (err) return done(err, false)
+            delete db_user.password
+            console.log('here', res)
+            if (res){
+                const user = {
+                    firstname : db_user.firstname,
+                    lastname : db_user.lastname,
+                    email: db_user.email
+                }
+                return done(null, user)
+            } 
+            else return done(null, false)
 
-// }));
+        }); 
 
-// //Google auth strategy
-// passport.use('googleToken', new GooglePlusTokenStrategy({
-//     clientID: '53906216838-h8vcj9r9bad3rhl6vgdsgmavgr0fgcbg.apps.googleusercontent.com',
-//     clientSecret: 'mIptDn4gScz76iyn82Me_Opr'
-// }, async (accessToken, refreshToken, profile, done) =>{
-//     console.log("accessToken", accessToken)
-//     console.log("refreshToken", refreshToken)
-//     console.log("profile", profile)
-// }));
+    //If not handle it
+    } catch (error){
+        return done(error, false)
+    }
+
+}));
 

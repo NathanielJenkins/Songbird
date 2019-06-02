@@ -1,9 +1,9 @@
 const env = require('dotenv').config(); 
 const express = require('express');
 app = express()
+app.use(express.json());
 
 //add the routes
-
 app.use("/", require('./app/routes/approutes'));
 
 //run the server
