@@ -5,9 +5,6 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 
 
-//database related modules
-const db = require('../tools/db');
-
 //authentication related modules
 const passportConf = require ('../tools/passport')
 const passport = require('passport')

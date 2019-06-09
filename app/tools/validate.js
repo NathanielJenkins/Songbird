@@ -11,7 +11,6 @@ module.exports = {
             if (result.error) {
                 return res.status(400).json(result.error);
             }
-
             next();
         }
     },

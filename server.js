@@ -1,12 +1,16 @@
 const env = require('dotenv').config(); 
 const express = require('express');
+const connectDb = require('./src/models/index').connectDb;
+
 app = express()
 app.use(express.json());
 
 //add the routes
 app.use("/", require('./app/routes/approutes'));
 
-//run the server
-port = process.env.PORT;    
-app.listen(port);
-console.log("starting the server on port: " + port)
+//connect to the database and run the server
+connectDb().then(async () => {
+    app.listen(process.env.PORT, () =>
+        console.log(`jofi listening on port ${process.env.PORT}!`),
+    );
+});
