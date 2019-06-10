@@ -58,7 +58,7 @@ router.post("/login",
  * } */
 router.post("/reset_password",
   validateBody(schemas.resetPassword),
-  email_controller.reset_email,
+  email_controller.reset_password,
   (req, res) => {
     return res.status(200).send('Done')
   }
@@ -76,6 +76,7 @@ router.get("/reset_password_confirm",
 
   }, passport.authenticate('jwt', {session : false}),
   (req, res, next) => {
+    //change the password to the password in the body ?     
     return res.status(200).send({"authorization" : "success"})
   }
 )

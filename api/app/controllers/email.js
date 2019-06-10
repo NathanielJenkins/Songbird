@@ -18,7 +18,7 @@ module.exports = {
     
 
     // send mail with defined transport object
-    reset_email :  (req, res, next) => {
+    reset_password :  (req, res, next) => {
         const email = new Email ({
             transport : transporter,
             send: false, 
