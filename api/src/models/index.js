@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const User = require('./user')
-const ResetPass = require('./resetpassword')
 
 //handing the node js warning
 mongoose.set('useCreateIndex', true);
@@ -11,4 +10,4 @@ const connectDb = () => {
 
 
 module.exports.connectDb =  connectDb ;
-module.exports.schemas = { User, ResetPass }
+module.exports.schemas = { User }

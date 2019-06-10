@@ -60,6 +60,7 @@ router.post("/reset_password",
   validateBody(schemas.resetPassword),
   email_controller.reset_password,
   (req, res) => {
+    console.log('here')
     return res.status(200).send('Done')
   }
 )
