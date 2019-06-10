@@ -5,9 +5,6 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 
 
-//database related modules
-const db = require('../tools/db');
-
 //authentication related modules
 const passportConf = require ('../tools/passport')
 const passport = require('passport')
@@ -56,11 +53,32 @@ router.post("/login",
   user_controller.sign_in  
 )
 
-router.all("/reset_password",
-  email_controller.email_test,
+/** req.body {
+ *  email
+ * } */
+router.post("/reset_password",
+  validateBody(schemas.resetPassword),
+  email_controller.reset_password,
   (req, res) => {
     console.log('here')
     return res.status(200).send('Done')
+  }
+)
+
+/** req.query
+ * token
+ */
+router.get("/reset_password_confirm",
+  // set the header to the jwt
+  (req, res, next) => {
+    token = req.query.token
+    req.headers.authorization = `Bearer ${token}`
+    next()
+
+  }, passport.authenticate('jwt', {session : false}),
+  (req, res, next) => {
+    //change the password to the password in the body ?     
+    return res.status(200).send({"authorization" : "success"})
   }
 )
 

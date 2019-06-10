@@ -13,7 +13,7 @@ let transporter = nodemailer.createTransport({
 
 module.exports = {
     // send mail with defined transport object
-    email_test :  (req, res, next) => {
+    reset_password :  (req, res, next) => {
         const email = new Email ({
             transport : transporter,
             send: true, 
