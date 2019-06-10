@@ -1,9 +1,10 @@
 
 // Passport authentication
 const passport = require('passport')
-// const JwtStrategy = require('passport-jwt').Strategy, ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
-// const JWT_SECRET  = process.env.JSON_WEB_TOKEN   
+const JWT_SECRET = process.env.JWTSECRET   
 
 //Hashing and encrypting
 const bcrypt = require('bcryptjs');
@@ -44,25 +45,19 @@ passport.use(new LocalStrategy({
 }));
 
 
-// //JSON web token strategy
-// passport.use(new JwtStrategy({
-//     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//     secretOrKey : JWT_SECRET
-// }, async(payload, done) => {
-//     try {
-//         //find the user in the token
-//         let text = qStrings.selectViaId;
-//         let values = [payload.sub]; 
-//         console.log(text, values)
-//         query(text, values, (err, result) => {
-//             if (err) throw new Error ('database error')
-//             //user does not exist
-//             if (result.rowCount == 0 ) return (null, false)
-//             console.log('I am here')
-//             return done(null, result.rows[0])            
-//         });
-
-//     } catch (error) {
-//         return done(error, false)
-//     }
-// }));
+//JSON web token strategy
+passport.use(new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey : JWT_SECRET
+}, async(payload, done) => {
+    const UserModel = schemas.User
+    const email = payload.sub
+    const db_user = UserModel.findByEmail(email)
+    .then ((db_user) => {
+        if (!db_user) return done(null, false)
+        return done(null, db_user)
+    })
+    .catch ((err) => {
+        return done(err, false)
+    }) 
+}));

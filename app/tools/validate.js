@@ -14,6 +14,17 @@ module.exports = {
             next();
         }
     },
+
+    validateParams: (schema) => {
+        return (req, res, next) => {
+
+            const result = Joi.validate(req.query, schema);
+            if (result.error) {
+                return res.status(400).json(result.error);
+            }
+            next();
+        }
+    },
   
     schemas: {
         authSchema: Joi.object().keys({
@@ -26,7 +37,11 @@ module.exports = {
         loginSchema : Joi.object().keys({
             email: Joi.string().email().required(),
             password: Joi.string().min(5).required()
-        })
+        }),
+
+        resetPassword : Joi.object().keys({
+            email: Joi.string().email().required(),
+        }) 
     }
   }
   
