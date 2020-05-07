@@ -12,13 +12,22 @@ const { validateBody, schemas } = require("../tools/validate");
 const user_controller = require("../controllers/users");
 const random_controller = require("../controllers/random");
 const email_controller = require("../controllers/email");
+
 /**
  * Test route
  */
-
 router.all("/", async (req, res) => {
 	return res.status(200).send("Hello Wor... *cough*.. Hello SongBird :)");
 });
+
+/** */
+router.all(
+	"/protected_route",
+	passport.authenticate("jwt", { session: false }),
+	(req, res) => {
+		return res.status(200).send("protected route success");
+	}
+);
 
 /**
  * req.body {
@@ -59,7 +68,6 @@ router.post(
 	validateBody(schemas.resetPassword),
 	email_controller.reset_password,
 	(req, res) => {
-		console.log("here");
 		return res.status(200).send("Done");
 	}
 );
