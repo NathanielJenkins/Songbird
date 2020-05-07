@@ -9,8 +9,12 @@ app.use(express.json());
 app.use("/", require("./app/routes/approutes"));
 //connect to the database and run the server
 
-connectDb().then(async () => {
-	app.listen(process.env.PORT, () =>
-		console.log(`jofi listening on port ${process.env.PORT}!`)
-	);
-});
+connectDb()
+	.then(async () => {
+		app.listen(process.env.PORT, () =>
+			console.log(`jofi listening on port ${process.env.PORT}!`)
+		);
+	})
+	.catch(() => {
+		console.log("could not connect to the database");
+	});
