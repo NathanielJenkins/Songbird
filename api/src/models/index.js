@@ -5,7 +5,7 @@ const User = require("./user");
 mongoose.set("useCreateIndex", true);
 
 const connectDb = () => {
-	return mongoose.connect(process.env.DATABASE_URL, {
+	return mongoose.connect(process.env.MONGODB_URI || process.env.DATABASE_URL, {
 		useUnifiedTopology: true,
 		useNewUrlParser: true,
 	});
