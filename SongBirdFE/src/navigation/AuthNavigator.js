@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext } from "../context/context";
 
 import SignInScreen from "../screens/SignInScreen";
+import SignUpScreen from "../screens/SignUpScreen";
 import SplashScreen from "../screens/SplashScreen";
 import HomeScreen from "../screens/HomeScreen";
 
@@ -89,18 +90,31 @@ export default function AuthNavigator({ navigation }) {
 						<Stack.Screen name="Splash" component={SplashScreen} />
 					) : state.userToken == null ? (
 						// No token found, user isn't signed in
-						<Stack.Screen
-							name="SignIn"
-							component={SignInScreen}
-							options={{
-								title: "Sign in",
-								// When logging out, a pop animation feels intuitive
-								animationTypeForReplace: state.isSignout ? "pop" : "push",
-							}}
-						/>
+						<>
+							<Stack.Screen
+								name="SignIn"
+								component={SignInScreen}
+								options={{
+									title: "Sign in",
+									// When logging out, a pop animation feels intuitive
+									animationTypeForReplace: state.isSignout ? "pop" : "push",
+								}}
+							/>
+							<Stack.Screen
+								name="SignUp"
+								component={SignUpScreen}
+								options={{
+									title: "Sign up",
+									// When logging out, a pop animation feels intuitive
+									animationTypeForReplace: state.isSignout ? "pop" : "push",
+								}}
+							/>
+						</>
 					) : (
 						// User is signed in
-						<Stack.Screen name="Home" component={HomeScreen} />
+						<>
+							<Stack.Screen name="Home" component={HomeScreen} />
+						</>
 					)}
 				</Stack.Navigator>
 			</NavigationContainer>

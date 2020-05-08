@@ -1,29 +1,19 @@
 {
-  "expo": {
-    "name": "SongBirdFE",
-    "slug": "SongBirdFE",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    }
-  }
+	"expo": {
+		"name": "SongBirdFE",
+		"slug": "SongBirdFE",
+		"platforms": ["ios", "android", "web"],
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "",
+		"scheme": "myapp",
+		"splash": {},
+		"updates": {
+			"fallbackToCacheTimeout": 0
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true
+		}
+	}
 }
