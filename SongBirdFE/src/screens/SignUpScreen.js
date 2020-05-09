@@ -61,8 +61,7 @@ export default function SignInScreen({ navigation }) {
 			password,
 			repeat_password,
 		});
-		console.log(password, repeat_password);
-		console.log("error", result.error);
+
 		result.error ? setError("Passwords do not match") : setError("");
 	}, [repeat_password]);
 
@@ -83,12 +82,14 @@ export default function SignInScreen({ navigation }) {
 						icon={faUser}
 					/>
 					<Form
+						autoCapitalize="none"
 						placeholder="Email"
 						value={email}
 						onChangeText={setEmail}
 						icon={faEnvelope}
 					/>
 					<Form
+						autoCapitalize="none"
 						placeholder="Password"
 						value={password}
 						onChangeText={setPassword}
@@ -96,6 +97,7 @@ export default function SignInScreen({ navigation }) {
 						secureTextEntry
 					/>
 					<Form
+						autoCapitalize="none"
 						placeholder="Confirm Password"
 						value={repeat_password}
 						onChangeText={setRepeatPassword}

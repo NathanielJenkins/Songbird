@@ -1,1 +1,2 @@
 - (fixed) fix the annoying text input screen so u can easily input your information the UX is not good
+- Manage environment variables on the react side better than a json file

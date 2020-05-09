@@ -12,7 +12,7 @@ app.use("/", require("./app/routes/approutes"));
 connectDb()
 	.then(async () => {
 		app.listen(process.env.PORT, () =>
-			console.log(`jofi listening on port ${process.env.PORT}!`)
+			console.log(`jofi listening on port localhost/${process.env.PORT}!`)
 		);
 	})
 	.catch(() => {

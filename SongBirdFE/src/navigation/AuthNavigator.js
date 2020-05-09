@@ -9,6 +9,9 @@ import SignUpScreen from "../screens/SignUpScreen";
 import SplashScreen from "../screens/SplashScreen";
 import HomeScreen from "../screens/HomeScreen";
 
+//axios
+import { test } from "../api/apiHandler";
+
 const Stack = createStackNavigator();
 
 export default function AuthNavigator({ navigation }) {
@@ -70,7 +73,7 @@ export default function AuthNavigator({ navigation }) {
 			},
 			signOut: () => dispatch({ type: "SIGN_OUT" }),
 			signUp: async (data) => {
-				console.log(data);
+				test();
 
 				dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
 			},
