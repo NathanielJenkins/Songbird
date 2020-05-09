@@ -1,0 +1,1 @@
+- (fixed) fix the annoying text input screen so u can easily input your information the UX is not good

@@ -5,9 +5,13 @@ import {
 	Image,
 	Text,
 	View,
+	KeyboardAvoidingView,
+	TouchableWithoutFeedback,
 	TouchableHighlight,
 	Button,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import { Card } from "react-native-elements";
 
 import {
@@ -23,36 +27,35 @@ import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { authSchemas, validate } from "../validation/validation";
 
 export default function SignInScreen({ navigation }) {
-	const [firstname, setFirstname] = React.useState("");
-	const [lastname, setLastname] = React.useState("");
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
-	const [repeat_password, setRepeatPassword] = React.useState("");
+	const { signUp } = React.useContext(AuthContext);
 	const [error, setError] = React.useState("");
 
-	const { signUp } = React.useContext(AuthContext);
-
 	//call backs for error handling (maybe cleaner way>? )
+	const [firstname, setFirstname] = React.useState("");
 	React.useEffect(() => {
 		const result = validate(authSchemas.firstname, firstname);
 		result.error ? setError("Please set valid firstname") : setError("");
 	}, [firstname]);
 
+	const [lastname, setLastname] = React.useState("");
 	React.useEffect(() => {
 		const result = validate(authSchemas.lastname, lastname);
 		result.error ? setError("Please set valid lastname") : setError("");
 	}, [lastname]);
 
+	const [email, setEmail] = React.useState("");
 	React.useEffect(() => {
 		const result = validate(authSchemas.email, email);
 		result.error ? setError("Please set valid email") : setError("");
 	}, [email]);
 
+	const [password, setPassword] = React.useState("");
 	React.useEffect(() => {
 		const result = validate(authSchemas.password, password);
 		result.error ? setError("Please set valid email") : setError("");
 	}, [password]);
 
+	const [repeat_password, setRepeatPassword] = React.useState("");
 	React.useEffect(() => {
 		const result = validate(authSchemas.password_schema, {
 			password,
@@ -62,48 +65,51 @@ export default function SignInScreen({ navigation }) {
 		console.log("error", result.error);
 		result.error ? setError("Passwords do not match") : setError("");
 	}, [repeat_password]);
+
 	return (
 		<View style={styles.container}>
 			<Card>
-				<Form
-					placeholder="Firstname"
-					value={firstname}
-					onChangeText={setFirstname}
-					icon={faUser}
-				/>
-				<Form
-					placeholder="Lastname"
-					value={lastname}
-					onChangeText={setLastname}
-					icon={faUser}
-				/>
-				<Form
-					placeholder="Email"
-					value={email}
-					onChangeText={setEmail}
-					icon={faEnvelope}
-				/>
-				<Form
-					placeholder="Password"
-					value={password}
-					onChangeText={setPassword}
-					icon={faKey}
-					secureTextEntry
-				/>
-				<Form
-					placeholder="Confirm Password"
-					value={repeat_password}
-					onChangeText={setRepeatPassword}
-					icon={faKey}
-					// secureTextEntry
-				/>
-				<HR />
-				<PrimaryButton
-					title="Sign Up"
-					onPress={() => {
-						signUp({ email, firstname, lastname, password });
-					}}
-				/>
+				<KeyboardAwareScrollView>
+					<Form
+						placeholder="Firstname"
+						value={firstname}
+						onChangeText={setFirstname}
+						icon={faUser}
+					/>
+					<Form
+						placeholder="Lastname"
+						value={lastname}
+						onChangeText={setLastname}
+						icon={faUser}
+					/>
+					<Form
+						placeholder="Email"
+						value={email}
+						onChangeText={setEmail}
+						icon={faEnvelope}
+					/>
+					<Form
+						placeholder="Password"
+						value={password}
+						onChangeText={setPassword}
+						icon={faKey}
+						secureTextEntry
+					/>
+					<Form
+						placeholder="Confirm Password"
+						value={repeat_password}
+						onChangeText={setRepeatPassword}
+						icon={faKey}
+						secureTextEntry
+					/>
+					<HR />
+					<PrimaryButton
+						title="Sign Up"
+						onPress={() => {
+							signUp({ email, firstname, lastname, password });
+						}}
+					/>
+				</KeyboardAwareScrollView>
 			</Card>
 
 			{error ? (
