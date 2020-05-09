@@ -1,7 +1,19 @@
 import React from "react";
 import { AuthContext } from "../context/context";
-import { StyleSheet, Image, Button, Text, TextInput, View } from "react-native";
+import {
+	StyleSheet,
+	Image,
+	Button,
+	Text,
+	TextInput,
+	View,
+	TouchableHighlight,
+} from "react-native";
 import { Card } from "react-native-elements";
+import { Form, LinkText } from "../components/Form";
+
+//assets
+import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
 export default function SignInScreen({ navigation }) {
 	const [email, setEmail] = React.useState("");
@@ -12,19 +24,35 @@ export default function SignInScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<Card>
-				<TextInput placeholder="Email" value={email} onChangeText={setEmail} />
-				<TextInput
+				<Form
+					placeholder="Email"
+					value={email}
+					onChangeText={setEmail}
+					icon={faEnvelope}
+				/>
+				<Form
 					placeholder="Password"
 					value={password}
 					onChangeText={setPassword}
+					icon={faKey}
 					secureTextEntry
 				/>
 				<Button
 					title="Sign in"
-					onPress={() => signIn({ username, password })}
+					onPress={() => {
+						signIn({ email, password });
+					}}
 				/>
 			</Card>
-			<Button title="Sign up" onPress={() => navigation.navigate("SignUp")} />
+			<TouchableHighlight
+				onPress={() => navigation.navigate("SignUp")}
+				style={styles.textContainer}
+			>
+				<View style={styles.textContainer}>
+					<Text>Don't have an Account?</Text>
+					<LinkText value="Create an Account" />
+				</View>
+			</TouchableHighlight>
 		</View>
 	);
 }
@@ -32,5 +60,10 @@ export default function SignInScreen({ navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	textContainer: {
+		marginTop: 30,
+		flex: 1,
+		alignItems: "center",
 	},
 });
