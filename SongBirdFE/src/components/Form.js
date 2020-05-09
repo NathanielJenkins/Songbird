@@ -28,6 +28,14 @@ export function LinkText(props) {
 	);
 }
 
+export function ErrorText(props) {
+	return (
+		<Text style={styles.errorText} {...props}>
+			{props.value}
+		</Text>
+	);
+}
+
 export function PrimaryButton(props) {
 	return (
 		<TouchableOpacity style={styles.buttonStyle} {...props}>
@@ -69,6 +77,9 @@ const styles = StyleSheet.create({
 	},
 	linkText: {
 		color: "crimson",
+	},
+	errorText: {
+		color: "red",
 	},
 	buttonStyle: {
 		alignItems: "center",

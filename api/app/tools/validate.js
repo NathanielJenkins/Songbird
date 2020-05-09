@@ -17,16 +17,11 @@ module.exports = {
 			lastname: Joi.string().min(1).max(15).required(),
 			email: Joi.string().email().required(),
 			password: Joi.string().min(5).required(),
-			repeat_password: Joi.ref("password"),
 		}),
 
 		loginSchema: Joi.object().keys({
 			email: Joi.string().email().required(),
 			password: Joi.string().min(5).required(),
 		}),
-	},
-
-	validateClient: (schema, values) => {
-		return schema.validate(values);
 	},
 };
