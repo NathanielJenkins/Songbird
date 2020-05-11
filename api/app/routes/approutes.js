@@ -42,8 +42,9 @@ router.post(
 	validateBody(schemas.authSchema),
 	random_controller.hash_pass,
 	user_controller.register,
+	email_controller.register_email,
 	async (req, res) => {
-		return res.status(200).send({ message: "Please log in" });
+		return res.status(200).send({ message: "Please verify your email" });
 	}
 );
 
@@ -77,16 +78,21 @@ router.post(
  */
 router.get(
 	"/reset_password_confirm",
-	// set the header to the jwt
-	(req, res, next) => {
-		token = req.query.token;
-		req.headers.authorization = `Bearer ${token}`;
-		next();
-	},
+	user_controller.setJwtFromQuery,
 	passport.authenticate("jwt", { session: false }),
 	(req, res, next) => {
 		//change the password to the password in the body ?
 		return res.status(200).send({ authorization: "success" });
+	}
+);
+
+router.get(
+	"/verify_user",
+	user_controller.setJwtFromQuery,
+	passport.authenticate("jwt", { session: false }),
+	user_controller.verifyUser,
+	(req, res) => {
+		return res.status(200).send("Successfully Verified Email, Please log in");
 	}
 );
 

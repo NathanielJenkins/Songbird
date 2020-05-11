@@ -20,11 +20,14 @@ import {
 	ErrorText,
 	PrimaryButton,
 	HR,
+	SimpleAlert,
 } from "../components/Form";
 
 //assets
 import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { authSchemas, validate } from "../validation/validation";
+
+import { register } from "../api/apiHandler";
 
 export default function SignInScreen({ navigation }) {
 	const { signUp } = React.useContext(AuthContext);
@@ -52,17 +55,14 @@ export default function SignInScreen({ navigation }) {
 	const [password, setPassword] = React.useState("");
 	React.useEffect(() => {
 		const result = validate(authSchemas.password, password);
-		result.error ? setError("Please set valid email") : setError("");
+		result.error ? setError("Please set valid password") : setError("");
 	}, [password]);
 
 	const [repeat_password, setRepeatPassword] = React.useState("");
 	React.useEffect(() => {
-		const result = validate(authSchemas.password_schema, {
-			password,
-			repeat_password,
-		});
-
-		result.error ? setError("Passwords do not match") : setError("");
+		password != repeat_password
+			? setError("Passwords do not match 123")
+			: setError("");
 	}, [repeat_password]);
 
 	return (
@@ -107,8 +107,13 @@ export default function SignInScreen({ navigation }) {
 					<HR />
 					<PrimaryButton
 						title="Sign Up"
-						onPress={() => {
-							signUp({ email, firstname, lastname, password });
+						onPress={async () => {
+							register({
+								email,
+								firstname,
+								lastname,
+								password,
+							}).then((res) => SimpleAlert(res.success, res.message));
 						}}
 					/>
 				</KeyboardAwareScrollView>

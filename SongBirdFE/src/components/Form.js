@@ -6,6 +6,7 @@ import {
 	Text,
 	Button,
 	TouchableOpacity,
+	Alert,
 } from "react-native";
 
 // img assets
@@ -54,6 +55,23 @@ export function HR() {
 				marginVertical: 20,
 			}}
 		/>
+	);
+}
+
+export function SimpleAlert(title, msg) {
+	title == true ? (title = "Success") : (title = "Error");
+	console.log(title);
+	Alert.alert(
+		title,
+		msg,
+		[
+			{
+				text: "Cancel",
+				style: "cancel",
+			},
+			{ text: "OK" },
+		],
+		{ cancelable: false }
 	);
 }
 

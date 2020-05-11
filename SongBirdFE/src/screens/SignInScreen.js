@@ -10,7 +10,7 @@ import {
 	TouchableHighlight,
 } from "react-native";
 import { Card } from "react-native-elements";
-import { Form, LinkText } from "../components/Form";
+import { Form, LinkText, PrimaryButton, HR } from "../components/Form";
 
 //assets
 import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
@@ -25,19 +25,22 @@ export default function SignInScreen({ navigation }) {
 		<View style={styles.container}>
 			<Card>
 				<Form
+					autoCapitalize="none"
 					placeholder="Email"
 					value={email}
 					onChangeText={setEmail}
 					icon={faEnvelope}
 				/>
 				<Form
+					autoCapitalize="none"
 					placeholder="Password"
 					value={password}
 					onChangeText={setPassword}
 					icon={faKey}
 					secureTextEntry
 				/>
-				<Button
+				<HR />
+				<PrimaryButton
 					title="Sign in"
 					onPress={() => {
 						signIn({ email, password });

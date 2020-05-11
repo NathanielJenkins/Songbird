@@ -10,8 +10,7 @@ import SplashScreen from "../screens/SplashScreen";
 import HomeScreen from "../screens/HomeScreen";
 
 //axios
-import { test } from "../api/apiHandler";
-
+import { register, test, login } from "../api/apiHandler";
 const Stack = createStackNavigator();
 
 export default function AuthNavigator({ navigation }) {
@@ -69,14 +68,12 @@ export default function AuthNavigator({ navigation }) {
 	const authContext = React.useMemo(
 		() => ({
 			signIn: async (data) => {
-				dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+				login(data).then((resp) => {
+					if (resp.success) dispatch({ type: "SIGN_IN", token: resp.token });
+				});
 			},
 			signOut: () => dispatch({ type: "SIGN_OUT" }),
-			signUp: async (data) => {
-				test();
-
-				dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
-			},
+			signUp: (data) => register(data),
 		}),
 		[]
 	);

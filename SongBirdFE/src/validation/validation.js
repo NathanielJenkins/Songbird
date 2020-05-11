@@ -8,17 +8,14 @@ export const authSchemas = {
 	lastname: Joi.string().min(1).max(15).required(),
 	email: Joi.string()
 		.email({ tlds: { allow: false } })
+		.trim()
 		.required(),
 	password: Joi.string().min(5).required(),
 	repeat_password: Joi.ref("password"),
 	email: Joi.string()
 		.email({ tlds: { allow: false } })
 		.required(),
-
-	password_schema: Joi.object().keys({
-		password: Joi.string().min(5).required(),
-		repeat_password: Joi.valid(Joi.ref("password")),
-	}),
+	password: Joi.string().min(5).required(),
 };
 
 export function validate(schema, values) {

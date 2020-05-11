@@ -1,2 +1,4 @@
 - (fixed) fix the annoying text input screen so u can easily input your information the UX is not good
-- Manage environment variables on the react side better than a json file
+- (low )Manage environment variables on the react side better than a json file
+- (low )Find a better way to manage promises and functinos with axios (make it more readable)
+- (med) Come up with a universal solution for validation errors from the api. ? User friendly custom error message?, return sucess boolean and string message 

@@ -1,6 +1,6 @@
 const env = require("dotenv").config();
 const express = require("express");
-const connectDb = require("./src/models/index").connectDb;
+const connectDb = require("./models/index").connectDb;
 
 app = express();
 app.use(express.json());
@@ -12,7 +12,7 @@ app.use("/", require("./app/routes/approutes"));
 connectDb()
 	.then(async () => {
 		app.listen(process.env.PORT, () =>
-			console.log(`jofi listening on port localhost/${process.env.PORT}!`)
+			console.log(`songbird listening on port localhost/${process.env.PORT}!`)
 		);
 	})
 	.catch(() => {

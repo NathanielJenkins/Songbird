@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWTSECRET;
 const bcrypt = require("bcryptjs");
 
 //databases
-const schemas = require("../../src/models/index").schemas;
+const schemas = require("../../models/index").schemas;
 
 //Local strategy
 /**
@@ -27,6 +27,9 @@ passport.use(
 
 			//they do not exist
 			if (!db_user) return done(null, false);
+
+			// they are not verified
+			if (!db_user.isverified) return done(null, false);
 
 			//Check if the password is correct
 			bcrypt.compare(password, db_user.password, function (err, res) {
