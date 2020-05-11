@@ -1,8 +1,8 @@
 const axios = require("axios");
-import { LOCAL_API } from "../../env";
-
+import { API } from "../../env";
+console.log(API);
 const ax = axios.create({
-	baseURL: process.env.LIVE_API || LOCAL_API,
+	baseURL: API,
 	timeout: 1000,
 });
 
@@ -30,10 +30,11 @@ export async function register(user) {
 			};
 		})
 		.catch((error) => {
+			console.log(error.response);
 			//To do all error handling
 			return {
 				success: false,
-				message: "TO DO ERROR CUSTOM ERROR MESSAGES",
+				message: "TO DO ERROR CUSTOM ERROR MESSAGES 1",
 			};
 		});
 }
