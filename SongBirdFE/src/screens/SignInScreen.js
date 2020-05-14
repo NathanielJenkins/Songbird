@@ -49,7 +49,9 @@ export default function SignInScreen({ navigation }) {
 				<PrimaryButton
 					title="Sign in"
 					onPress={() => {
-						signIn({ email, password }).then(SimpleAlert(false, "can't login"));
+						signIn({ email: email.trim(), password }).then((resp) => {
+							if (!resp.success) SimpleAlert(false, resp.message);
+						});
 					}}
 				/>
 			</Card>

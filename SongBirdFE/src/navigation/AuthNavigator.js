@@ -1,5 +1,7 @@
 import React from "react";
 
+import { AsyncStorage } from "react-native";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthContext } from "../context/context";
@@ -8,9 +10,12 @@ import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import SplashScreen from "../screens/SplashScreen";
 import HomeScreen from "../screens/HomeScreen";
+import PerformerHomeScreen from "../screens/PerformerHomeScreen";
+import VenueHomeScreen from "../screens/VenueHomeScreen";
+import ChooseUserType from "../screens/ChooseUserType";
 
 //axios
-import { register, test, login } from "../api/apiHandler";
+import { register, test, login, updateUser } from "../api/apiHandler";
 const Stack = createStackNavigator();
 
 export default function AuthNavigator({ navigation }) {
@@ -21,6 +26,7 @@ export default function AuthNavigator({ navigation }) {
 					return {
 						...prevState,
 						userToken: action.token,
+						userType: action.userType,
 						isLoading: false,
 					};
 				case "SIGN_IN":
@@ -28,6 +34,7 @@ export default function AuthNavigator({ navigation }) {
 						...prevState,
 						isSignout: false,
 						userToken: action.token,
+						userType: action.userType,
 					};
 				case "SIGN_OUT":
 					return {
@@ -35,12 +42,18 @@ export default function AuthNavigator({ navigation }) {
 						isSignout: true,
 						userToken: null,
 					};
+				case "ACCOUNT_CHANGE":
+					return {
+						...prevState,
+						userType: action.userType,
+					};
 			}
 		},
 		{
 			isLoading: true,
 			isSignout: false,
 			userToken: null,
+			userType: -1,
 		}
 	);
 
@@ -48,9 +61,14 @@ export default function AuthNavigator({ navigation }) {
 		// Fetch the token from storage then navigate to our appropriate place
 		const bootstrapAsync = async () => {
 			let userToken;
+			let userType;
+			let items;
 
 			try {
 				userToken = await AsyncStorage.getItem("userToken");
+				userType = await AsyncStorage.getItem("userType");
+
+				//console.log(items[0][0], items[0][1]);
 			} catch (e) {
 				// Restoring token failed
 			}
@@ -59,7 +77,11 @@ export default function AuthNavigator({ navigation }) {
 
 			// This will switch to the App screen or Auth screen and this loading
 			// screen will be unmounted and thrown away.
-			dispatch({ type: "RESTORE_TOKEN", token: userToken });
+			dispatch({
+				type: "RESTORE_TOKEN",
+				token: userToken,
+				userType: -1,
+			});
 		};
 
 		bootstrapAsync();
@@ -68,12 +90,28 @@ export default function AuthNavigator({ navigation }) {
 	const authContext = React.useMemo(
 		() => ({
 			signIn: async (data) => {
-				login(data).then((resp) => {
-					if (resp.success) dispatch({ type: "SIGN_IN", token: resp.token });
+				return login(data).then((resp) => {
+					if (resp.success) {
+						dispatch({
+							type: "SIGN_IN",
+							token: resp.token,
+							userType: resp.user.type,
+						});
+						AsyncStorage.setItem("userToken", resp.token);
+						AsyncStorage.setItem("userType", resp.user.type.toString());
+					}
+					return resp;
 				});
 			},
+
 			signOut: () => dispatch({ type: "SIGN_OUT" }),
 			signUp: (data) => register(data),
+			setAccountVenue: (data) => {
+				return updateUser(data).then((resp) => {
+					dispatch({ type: "ACCOUNT_CHANGE", userType: data.type });
+					AsyncStorage.setItem("userType", data.type.toString());
+				});
+			},
 		}),
 		[]
 	);
@@ -107,10 +145,24 @@ export default function AuthNavigator({ navigation }) {
 								}}
 							/>
 						</>
-					) : (
-						// User is signed in
+					) : state.userType == 0 ? (
 						<>
-							<Stack.Screen name="Home" component={HomeScreen} />
+							<Stack.Screen
+								name="PerformerHome"
+								component={PerformerHomeScreen}
+							/>
+						</>
+					) : state.userType == 1 ? (
+						<>
+							<Stack.Screen name="VenueHome" component={VenueHomeScreen} />
+						</>
+					) : (
+						<>
+							<Stack.Screen
+								options={{ headerShown: false }}
+								name="ChooseUserType"
+								component={ChooseUserType}
+							/>
 						</>
 					)}
 				</Stack.Navigator>

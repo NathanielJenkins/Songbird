@@ -1,10 +1,17 @@
+import React from "react";
+import { AsyncStorage } from "react-native";
+
 const axios = require("axios");
 import { API } from "../../env";
-console.log(API);
+
 const ax = axios.create({
 	baseURL: API,
 	timeout: 1000,
 });
+
+function setConfig(token) {
+	return { headers: { Authorization: `Bearer ${token}` } };
+}
 
 export function test() {
 	ax.post("/")
@@ -46,13 +53,24 @@ export async function login(user) {
 			return {
 				success: true,
 				token: response.data.token,
+				user: response.data,
 			};
 		})
 		.catch((error) => {
+			console.log(error);
 			//To do all error handling
 			return {
 				success: false,
-				message: "TO DO ERROR CUSTOM ERROR MESSAGES",
+				message: "Could not login",
 			};
 		});
+}
+
+export async function updateUser(user) {
+	console.log(setConfig(await AsyncStorage.getItem("userToken")));
+	return ax.patch(
+		"/update_user",
+		user,
+		setConfig(await AsyncStorage.getItem("userToken"))
+	);
 }

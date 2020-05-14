@@ -9,7 +9,8 @@ const UserSchema = new mongoose.Schema({
 	firstname: String,
 	lastname: String,
 	datecreated: Date,
-	isverified: Boolean,
+	isverified: { type: Boolean, default: false },
+	type: { type: Number, default: -1 },
 });
 
 UserSchema.statics.findByEmail = async function (email) {

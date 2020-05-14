@@ -11,8 +11,6 @@ import { AuthContext } from "./src/context/context";
 
 import AuthNavigator from "./src/navigation/AuthNavigator";
 
-const Stack = createStackNavigator();
-
 export default function App() {
 	return <AuthNavigator />;
 }

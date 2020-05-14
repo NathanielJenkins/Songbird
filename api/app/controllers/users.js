@@ -44,13 +44,13 @@ module.exports = {
 		);
 	},
 
-	sign_in: (req, res) => {
+	sign_in: (req, res, next) => {
 		const user = req.user;
 
 		const token = module.exports.signToken(user);
 		user.token = token;
 
-		return res.status(200).send(user);
+		return next();
 	},
 
 	setJwtFromQuery: (req, res, next) => {
@@ -63,6 +63,17 @@ module.exports = {
 		schemas.User.findOneAndUpdate(
 			{ email: req.user.email },
 			{ isverified: true },
+			(err, doc) => {
+				if (err) return res.status(400).send({ error: "could not find email" });
+				next();
+			}
+		);
+	},
+
+	updateUser: (req, res, next) => {
+		schemas.User.findOneAndUpdate(
+			{ email: req.user.email },
+			req.body,
 			(err, doc) => {
 				if (err) return res.status(400).send({ error: "could not find email" });
 				next();

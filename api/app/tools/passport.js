@@ -43,6 +43,7 @@ passport.use(
 						firstname: db_user.firstname,
 						lastname: db_user.lastname,
 						email: db_user.email,
+						type: db_user.type,
 					};
 					return done(null, user);
 				} else return done(null, false);

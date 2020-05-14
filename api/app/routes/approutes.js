@@ -43,7 +43,7 @@ router.post(
 	random_controller.hash_pass,
 	user_controller.register,
 	email_controller.register_email,
-	async (req, res) => {
+	(req, res) => {
 		return res.status(200).send({ message: "Please verify your email" });
 	}
 );
@@ -58,7 +58,10 @@ router.post(
 	"/login",
 	validateBody(schemas.loginSchema),
 	passport.authenticate("local", { session: false }),
-	user_controller.sign_in
+	user_controller.sign_in,
+	(req, res) => {
+		res.status(200).send(req.user);
+	}
 );
 
 /** req.body {
@@ -93,6 +96,15 @@ router.get(
 	user_controller.verifyUser,
 	(req, res) => {
 		return res.status(200).send("Successfully Verified Email, Please log in");
+	}
+);
+
+router.patch(
+	"/update_user",
+	passport.authenticate("jwt", { session: false }),
+	user_controller.updateUser,
+	(req, res) => {
+		return res.status(200).send("Successfully updated the user");
 	}
 );
 
