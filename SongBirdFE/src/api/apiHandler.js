@@ -3,6 +3,7 @@ import { AsyncStorage } from "react-native";
 
 const axios = require("axios");
 import { API } from "../../env";
+console.log("api", API);
 
 const ax = axios.create({
 	baseURL: API,
@@ -37,11 +38,10 @@ export async function register(user) {
 			};
 		})
 		.catch((error) => {
-			console.log(error.response);
 			//To do all error handling
 			return {
 				success: false,
-				message: "TO DO ERROR CUSTOM ERROR MESSAGES 1",
+				message: "Error, could not sign up.",
 			};
 		});
 }

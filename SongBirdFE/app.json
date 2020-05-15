@@ -13,7 +13,11 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"bundleIdentifier": "com.songbirdiso.songbird"
+		},
+		"android": {
+			"package": "com.songbirdiso.songbird"
 		}
 	}
 }

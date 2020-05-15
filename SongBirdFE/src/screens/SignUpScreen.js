@@ -109,10 +109,10 @@ export default function SignInScreen({ navigation }) {
 						title="Sign Up"
 						onPress={async () => {
 							register({
-								email,
-								firstname,
-								lastname,
-								password,
+								email: email.trim(),
+								firstname: firstname.trim(),
+								lastname: lastname.trim(),
+								password: password.trim(),
 							}).then((res) => SimpleAlert(res.success, res.message));
 						}}
 					/>
