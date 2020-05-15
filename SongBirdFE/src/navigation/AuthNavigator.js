@@ -66,7 +66,7 @@ export default function AuthNavigator({ navigation }) {
 
 			try {
 				userToken = await AsyncStorage.getItem("userToken");
-				userType = await AsyncStorage.getItem("userType");
+				userType = parseInt(await AsyncStorage.getItem("userType"));
 
 				//console.log(items[0][0], items[0][1]);
 			} catch (e) {
@@ -80,7 +80,7 @@ export default function AuthNavigator({ navigation }) {
 			dispatch({
 				type: "RESTORE_TOKEN",
 				token: userToken,
-				userType: -1,
+				userType: userType,
 			});
 		};
 

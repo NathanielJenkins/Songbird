@@ -1,23 +1,30 @@
 {
-	"expo": {
-		"name": "SongBirdFE",
-		"slug": "SongBirdFE",
-		"platforms": ["ios", "android", "web"],
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "",
-		"scheme": "myapp",
-		"splash": {},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.songbirdiso.songbird"
-		},
-		"android": {
-			"package": "com.songbirdiso.songbird"
-		}
-	}
+  "expo": {
+    "name": "SongBirdFE",
+    "slug": "SongBirdFE",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "",
+    "scheme": "myapp",
+    "splash": {},
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.songbirdiso.songbird"
+    },
+    "android": {
+      "package": "com.songbirdiso.songbird"
+    },
+    "description": ""
+  }
 }
