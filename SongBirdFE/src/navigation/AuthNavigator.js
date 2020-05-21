@@ -13,6 +13,8 @@ import HomeScreen from "../screens/HomeScreen";
 import PerformerHomeScreen from "../screens/PerformerHomeScreen";
 import VenueHomeScreen from "../screens/VenueHomeScreen";
 import ChooseUserType from "../screens/ChooseUserType";
+import WelcomeScreen from "../screens/WelcomeScreen";
+import InformationScreen from "../screens/InformationScreen";
 
 //axios
 import { register, test, login, updateUser } from "../api/apiHandler";
@@ -126,6 +128,22 @@ export default function AuthNavigator({ navigation }) {
 					) : state.userToken == null ? (
 						// No token found, user isn't signed in
 						<>
+							<Stack.Screen
+								name="Welcome"
+								component={WelcomeScreen}
+								options={{
+									headerShown: false,
+									title: "Welcome",
+								}}
+							/>
+							<Stack.Screen
+								name="Information"
+								component={InformationScreen}
+								options={{
+									headerShown: false,
+									title: "Welcome",
+								}}
+							/>
 							<Stack.Screen
 								name="SignUp"
 								component={SignUpScreen}

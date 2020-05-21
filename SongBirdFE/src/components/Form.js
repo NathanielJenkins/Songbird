@@ -45,12 +45,32 @@ export function PrimaryButton(props) {
 	);
 }
 
+export function SecondaryButton(props) {
+	return (
+		<TouchableOpacity style={styles.secondaryButtonStyle} {...props}>
+			<Text>{props.title}</Text>
+		</TouchableOpacity>
+	);
+}
+
 export function HR() {
 	return (
 		<View
 			style={{
 				alignItems: "center",
 				borderBottomColor: "lightgrey",
+				borderBottomWidth: 1,
+				marginVertical: 20,
+			}}
+		/>
+	);
+}
+export function HRFeature() {
+	return (
+		<View
+			style={{
+				alignItems: "center",
+				borderBottomColor: "#d93c64",
 				borderBottomWidth: 1,
 				marginVertical: 20,
 			}}
@@ -94,15 +114,22 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 	},
 	linkText: {
-		color: "crimson",
+		color: "#d93c64",
 	},
 	errorText: {
 		color: "red",
 	},
 	buttonStyle: {
 		alignItems: "center",
-		backgroundColor: "crimson",
+		backgroundColor: "#d93c64",
 		padding: 10,
+		borderRadius: 10,
+	},
+
+	secondaryButtonStyle: {
+		alignItems: "center",
+		backgroundColor: "white",
+		padding: 20,
 		borderRadius: 10,
 	},
 });

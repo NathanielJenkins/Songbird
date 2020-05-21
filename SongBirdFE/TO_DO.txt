@@ -3,3 +3,6 @@
 - (low )Find a better way to manage promises and functinos with axios (make it more readable)
 - (med) Come up with a universal solution for validation errors from the api. ? User friendly custom error message?, return sucess boolean and string message 
 - (high) all the errors on react side.. not sure
+
+<a href="https://www.freepik.com/free-photos-vectors/music">Music vector created by pch.vector - www.freepik.com</a>
+color theme red: #d93c64, dark: 32444e
