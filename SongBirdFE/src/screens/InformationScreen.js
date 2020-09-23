@@ -36,8 +36,7 @@ function InformationSection2() {
 		<ImageBackground source={screen2} style={{ width: "100%", height: "100%" }}>
 			<TextContainer
 				title="Find a venue to perform at"
-				text="Use the venue account to checkout performers near you and book them to
-					play"
+				text="Create an a performer profile to allow venues to find you and checkout your stuff"
 			/>
 		</ImageBackground>
 	);

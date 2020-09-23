@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	Alert,
 } from "react-native";
+import { SearchBar, Icon } from "react-native-elements";
 
 // img assets
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -39,7 +40,14 @@ export function ErrorText(props) {
 
 export function PrimaryButton(props) {
 	return (
-		<TouchableOpacity style={styles.buttonStyle} {...props}>
+		<TouchableOpacity
+			style={[
+				styles.buttonStyle,
+				styles.basicButtonStyle,
+				styles.centerTextStyle,
+			]}
+			{...props}
+		>
 			<Text style={{ color: "white" }}>{props.title}</Text>
 		</TouchableOpacity>
 	);
@@ -47,9 +55,42 @@ export function PrimaryButton(props) {
 
 export function SecondaryButton(props) {
 	return (
-		<TouchableOpacity style={styles.secondaryButtonStyle} {...props}>
+		<TouchableOpacity
+			style={[
+				styles.secondaryButtonStyle,
+				styles.basicButtonStyle,
+				styles.centerTextStyle,
+			]}
+			{...props}
+		>
 			<Text>{props.title}</Text>
 		</TouchableOpacity>
+	);
+}
+
+export function WideButton(props) {
+	return (
+		<View style={[{ width: "90%" }]}>
+			<TouchableOpacity
+				style={[
+					styles.secondaryButtonStyle,
+					styles.basicButtonStyle,
+					styles.wideButtonStyle,
+				]}
+				{...props}
+			>
+				<View style={{ flexDirection: "row" }}>
+					{props.icon && (
+						<Icon
+							color="#d93c64"
+							style={{ marginRight: 5 }}
+							name={props.icon}
+						/>
+					)}
+					<Text>{props.title}</Text>
+				</View>
+			</TouchableOpacity>
+		</View>
 	);
 }
 
@@ -80,7 +121,6 @@ export function HRFeature() {
 
 export function SimpleAlert(title, msg) {
 	title == true ? (title = "Success") : (title = "Error");
-	console.log(title);
 	Alert.alert(
 		title,
 		msg,
@@ -93,6 +133,10 @@ export function SimpleAlert(title, msg) {
 		],
 		{ cancelable: false }
 	);
+}
+
+export function RoundSearchBar() {
+	return <SearchBar placeholder="Search" />;
 }
 
 const styles = StyleSheet.create({
@@ -119,17 +163,27 @@ const styles = StyleSheet.create({
 	errorText: {
 		color: "red",
 	},
-	buttonStyle: {
-		alignItems: "center",
-		backgroundColor: "#d93c64",
+
+	basicButtonStyle: {
 		padding: 10,
 		borderRadius: 10,
 	},
 
-	secondaryButtonStyle: {
+	centerTextStyle: {
 		alignItems: "center",
+	},
+
+	buttonStyle: {
+		backgroundColor: "#d93c64",
+	},
+
+	secondaryButtonStyle: {
 		backgroundColor: "white",
-		padding: 20,
-		borderRadius: 10,
+	},
+
+	wideButtonStyle: {
+		alignSelf: "stretch",
+		borderRadius: 20,
+		padding: 15,
 	},
 });

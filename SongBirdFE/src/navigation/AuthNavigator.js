@@ -149,6 +149,7 @@ export default function AuthNavigator({ navigation }) {
 								component={SignUpScreen}
 								options={{
 									title: "Sign up",
+
 									// When logging out, a pop animation feels intuitive
 									animationTypeForReplace: state.isSignout ? "pop" : "push",
 								}}
@@ -168,11 +169,22 @@ export default function AuthNavigator({ navigation }) {
 							<Stack.Screen
 								name="PerformerHome"
 								component={PerformerHomeScreen}
+								options={{
+									headerShown: false,
+									title: "Performer Home",
+								}}
 							/>
 						</>
 					) : state.userType == 1 ? (
 						<>
-							<Stack.Screen name="VenueHome" component={VenueHomeScreen} />
+							<Stack.Screen
+								name="VenueHome"
+								component={VenueHomeScreen}
+								options={{
+									headerShown: false,
+									title: "Venue Home",
+								}}
+							/>
 						</>
 					) : (
 						<>
