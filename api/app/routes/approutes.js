@@ -1,12 +1,22 @@
 // express related modules
 const express = require("express");
+const cors = require("cors");
+
 const router = express.Router();
+router.use(cors());
+
 const bodyParser = require("body-parser");
+router.use(bodyParser.json());
+
+const multer = require("multer");
 
 //authentication related modules
 const passportConf = require("../tools/passport");
 const passport = require("passport");
 const { validateBody, schemas } = require("../tools/validate");
+
+//image upload
+const upload = multer({ dest: "uploads/" });
 
 //controllers
 const user_controller = require("../controllers/users");
@@ -106,6 +116,22 @@ router.patch(
 	(req, res) => {
 		return res.status(200).send("Successfully updated the user");
 	}
+);
+
+router.post(
+	"/upload",
+	passport.authenticate("jwt", { session: false }),
+	upload.single("fileData"),
+	(req, res) => {
+		console.log("file", req.file);
+		console.log("body", req.body);
+		return res.status(200).send("Successfully uploaded image");
+	}
+);
+
+router.get(
+	"/get_header_photo",
+	passport.authenticate("jwt", { session: false })
 );
 
 //export the router

@@ -74,3 +74,30 @@ export async function updateUser(user) {
 		setConfig(await AsyncStorage.getItem("userToken"))
 	);
 }
+
+export async function upload(image) {
+	const form = new FormData();
+	form.append("fileData", {
+		uri:
+			Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
+		type: "image/jpeg",
+		name: "avatar",
+	});
+
+	console.log(form);
+	return ax
+		.post("/upload", form, setConfig(await AsyncStorage.getItem("userToken")))
+		.then((response) => {
+			return {
+				success: true,
+			};
+		})
+		.catch((error) => {
+			console.log(error);
+			//To do all error handling
+			return {
+				success: false,
+				message: "Could not login",
+			};
+		});
+}

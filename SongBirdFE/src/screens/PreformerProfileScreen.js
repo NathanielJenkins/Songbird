@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AuthContext } from "../context/context";
 import {
 	Button,
@@ -9,24 +9,38 @@ import {
 	SafeAreaView,
 	ScrollView,
 } from "react-native";
-import { WideButton } from "../components/Form";
-import { SubtitleText } from "../components/Text";
-import { Card } from "react-native-elements";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import * as ImagePicker from "expo-image-picker";
 
-import { CardCarousel } from "../components/Card";
+import { upload } from "../api/apiHandler";
+
 import headerscreen from "../assets/images/venueheader.jpg";
-import card1 from "../assets/images/card1.jpg";
-import card2 from "../assets/images/card2.jpg";
-import card3 from "../assets/images/card3.jpg";
 
-export default function VenueExportScreen() {
-	const { signOut } = React.useContext(AuthContext);
+export default function PerformerProfileScreen() {
+	const [headerImage, setHeaderImage] = useState(null);
+
+	const handleChoosePhoto = async () => {
+		let image = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			quality: 1,
+		});
+
+		if (!image.cancelled) {
+			//set the state
+			setHeaderImage(image.uri);
+
+			//upload the image to the image server and db link
+			upload(image);
+		}
+	};
 
 	return (
 		<ScrollView>
 			<View style={styles.container}>
-				<Image source={headerscreen} style={styles.headerscreen} />
+				{headerImage && (
+					<Image source={{ uri: headerImage }} style={styles.headerscreen} />
+				)}
+				<Button title="Choose Photo" onPress={handleChoosePhoto}></Button>
 			</View>
 		</ScrollView>
 	);

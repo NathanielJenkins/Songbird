@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
 	datecreated: Date,
 	isverified: { type: Boolean, default: false },
 	type: { type: Number, default: -1 },
+	profile_id: { type: mongoose.Types.ObjectId, ref: "Profile", default: null },
 });
 
 UserSchema.statics.findByEmail = async function (email) {
