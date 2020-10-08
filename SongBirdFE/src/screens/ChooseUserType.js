@@ -1,14 +1,23 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+	Text,
+	View,
+	StyleSheet,
+	TouchableOpacity,
+	Image,
+	ScrollView,
+	SafeAreaView,
+} from "react-native";
 import { ImageCard } from "../components/Card";
 import { TitleText } from "../components/Text";
 import { AuthContext } from "../context/context";
+import { Card, Title, Paragraph } from "react-native-paper";
 
 export default function ChooseUserType({ navigation }) {
 	const { setAccountVenue } = React.useContext(AuthContext);
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<TitleText text="Choose Account Type" />
 			<TouchableOpacity
 				onPress={() => {
@@ -21,6 +30,7 @@ export default function ChooseUserType({ navigation }) {
 					text="I am looking for performers"
 				/>
 			</TouchableOpacity>
+
 			<TouchableOpacity
 				onPress={() => {
 					setAccountVenue({ type: 0 });
@@ -32,7 +42,7 @@ export default function ChooseUserType({ navigation }) {
 					text="I am a performer"
 				/>
 			</TouchableOpacity>
-		</View>
+		</SafeAreaView>
 	);
 }
 
