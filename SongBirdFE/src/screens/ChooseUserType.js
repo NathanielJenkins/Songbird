@@ -12,6 +12,7 @@ import { ImageCard } from "../components/Card";
 import { TitleText } from "../components/Text";
 import { AuthContext } from "../context/context";
 import { Card, Title, Paragraph } from "react-native-paper";
+import { generateDefaultProfile } from "../api/apiHandler";
 
 export default function ChooseUserType({ navigation }) {
 	const { setAccountVenue } = React.useContext(AuthContext);
@@ -34,6 +35,7 @@ export default function ChooseUserType({ navigation }) {
 			<TouchableOpacity
 				onPress={() => {
 					setAccountVenue({ type: 0 });
+					generateDefaultProfile();
 				}}
 			>
 				<ImageCard

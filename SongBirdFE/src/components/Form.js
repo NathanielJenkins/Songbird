@@ -22,6 +22,10 @@ export function Form(props) {
 	);
 }
 
+export function SquareForm(props) {
+	return <TextInput style={styles.squareForm} multiline {...props} />;
+}
+
 export function LinkText(props) {
 	return (
 		<Text style={styles.linkText} {...props}>
@@ -64,6 +68,21 @@ export function SecondaryButton(props) {
 			{...props}
 		>
 			<Text>{props.title}</Text>
+		</TouchableOpacity>
+	);
+}
+
+export function RoundButton(props) {
+	return (
+		<TouchableOpacity
+			style={[
+				styles.buttonStyle,
+				styles.roundButtonStyle,
+				styles.centerTextStyle,
+			]}
+			{...props}
+		>
+			<Text style={{ color: "white" }}>{props.title}</Text>
 		</TouchableOpacity>
 	);
 }
@@ -157,6 +176,21 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingLeft: 10,
 	},
+	inputStyle2: {
+		flex: 1,
+		color: "black",
+	},
+	squareForm: {
+		backgroundColor: "white",
+		flexDirection: "row",
+		paddingBottom: 10,
+		borderWidth: 1,
+		marginVertical: 5,
+		padding: 5,
+		paddingLeft: 15,
+		borderColor: "lightgrey",
+		alignItems: "center",
+	},
 	linkText: {
 		color: "#d93c64",
 	},
@@ -185,5 +219,10 @@ const styles = StyleSheet.create({
 		alignSelf: "stretch",
 		borderRadius: 20,
 		padding: 15,
+	},
+	roundButtonStyle: {
+		borderRadius: 30,
+		padding: 20,
+		elevation: 5,
 	},
 });

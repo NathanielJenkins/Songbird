@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AuthContext } from "../context/context";
+import React, { useState, useEffect, useContext } from "react";
+import { ProfileContext } from "../context/context";
 import {
 	Button,
 	Text,
@@ -9,40 +9,36 @@ import {
 	SafeAreaView,
 	ScrollView,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import { Icon } from "react-native-elements";
+import { TitleText } from "../components/Text";
 
-import { upload } from "../api/apiHandler";
-
-import headerscreen from "../assets/images/venueheader.jpg";
-
-export default function PerformerProfileScreen() {
-	const [headerImage, setHeaderImage] = useState(null);
-
-	const handleChoosePhoto = async () => {
-		let image = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			quality: 1,
-		});
-
-		if (!image.cancelled) {
-			//set the state
-			setHeaderImage(image.uri);
-
-			//upload the image to the image server and db link
-			upload(image);
-		}
-	};
-
+export default function PerformerProfileScreen({ navigation }) {
+	const [profile, setProfile] = useContext(ProfileContext);
 	return (
-		<ScrollView>
-			<View style={styles.container}>
-				{headerImage && (
-					<Image source={{ uri: headerImage }} style={styles.headerscreen} />
-				)}
-				<Button title="Choose Photo" onPress={handleChoosePhoto}></Button>
+		<>
+			<ScrollView>
+				<View style={styles.container}>
+					<Image
+						source={{ uri: profile.header_screen }}
+						style={styles.headerscreen}
+					/>
+
+					<TitleText text={profile.group_name} />
+					<Text>{profile.description}</Text>
+				</View>
+			</ScrollView>
+			<View style={styles.editProfile}>
+				<Icon
+					size={30}
+					reverse
+					raised
+					name="create"
+					type="material"
+					color="#d93c64"
+					onPress={() => navigation.navigate("EditProfile")}
+				/>
 			</View>
-		</ScrollView>
+		</>
 	);
 }
 const styles = StyleSheet.create({
@@ -59,5 +55,12 @@ const styles = StyleSheet.create({
 		height: 300,
 		borderBottomLeftRadius: 25,
 		borderBottomRightRadius: 25,
+	},
+
+	editProfile: {
+		elevation: 5,
+		position: "absolute",
+		bottom: 10,
+		right: 10,
 	},
 });

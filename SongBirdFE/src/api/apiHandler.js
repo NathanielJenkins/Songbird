@@ -14,20 +14,6 @@ function setConfig(token) {
 	return { headers: { Authorization: `Bearer ${token}` } };
 }
 
-export function test() {
-	ax.post("/")
-		.then((response) => {
-			console.log(response.data);
-		})
-		.catch(function (error) {
-			// handle error
-			console.log("err", error);
-		})
-		.then(function () {
-			// always executed
-		});
-}
-
 export async function register(user) {
 	return ax
 		.post("/register", user)
@@ -81,23 +67,69 @@ export async function upload(image) {
 		uri:
 			Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
 		type: "image/jpeg",
-		name: "avatar",
+		name: "header",
 	});
 
-	console.log(form);
 	return ax
 		.post("/upload", form, setConfig(await AsyncStorage.getItem("userToken")))
-		.then((response) => {
-			return {
-				success: true,
-			};
+		.then((res) => {
+			return res.data;
 		})
-		.catch((error) => {
-			console.log(error);
-			//To do all error handling
+		.catch((err) => {
 			return {
 				success: false,
-				message: "Could not login",
+				message: "Unable to generate upload image",
+			};
+		});
+}
+
+export async function generateDefaultProfile() {
+	return ax
+		.post(
+			"/generate_default_profile",
+			{},
+			setConfig(await AsyncStorage.getItem("userToken"))
+		)
+		.then((res) => {
+			return res.data;
+		})
+		.catch((err) => {
+			return {
+				success: false,
+				message: "Unable to generate default profile",
+			};
+		});
+}
+
+export async function getProfile() {
+	return ax
+		.get("/get_profile", setConfig(await AsyncStorage.getItem("userToken")))
+		.then((res) => {
+			return res.data;
+		})
+		.catch((err) => {
+			console.log(err);
+			return {
+				success: false,
+				message: "Unable to get profile",
+			};
+		});
+}
+
+export async function updateProfile(profile) {
+	return ax
+		.post(
+			"/update_profile",
+			profile,
+			setConfig(await AsyncStorage.getItem("userToken"))
+		)
+		.then((res) => {
+			return res.data;
+		})
+		.catch((err) => {
+			return {
+				success: false,
+				message: "Unable to update profile",
 			};
 		});
 }

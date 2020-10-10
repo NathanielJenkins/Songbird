@@ -1,10 +1,10 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import { Button } from "react-native";
 import { AsyncStorage } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { AuthContext } from "../context/context";
+import { AuthContext, ProfileContext } from "../context/context";
 
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
@@ -15,9 +15,19 @@ import VenueHomeScreen from "../screens/VenueHomeScreen";
 import ChooseUserType from "../screens/ChooseUserType";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import InformationScreen from "../screens/InformationScreen";
+import EditProfile from "../screens/EditProfile";
 
 //axios
-import { register, test, login, updateUser } from "../api/apiHandler";
+import {
+	register,
+	test,
+	login,
+	updateUser,
+	getProfile,
+} from "../api/apiHandler";
+
+import { SimpleAlert } from "../components/Form";
+
 const Stack = createStackNavigator();
 
 export default function AuthNavigator({ navigation }) {
@@ -59,17 +69,18 @@ export default function AuthNavigator({ navigation }) {
 		}
 	);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		// Fetch the token from storage then navigate to our appropriate place
 		const bootstrapAsync = async () => {
 			let userToken;
 			let userType;
 			let items;
+			let newUser;
 
 			try {
 				userToken = await AsyncStorage.getItem("userToken");
 				userType = parseInt(await AsyncStorage.getItem("userType"));
-
+				newUser = parseInt(await AsyncStorage.getItem("newUser"));
 				//console.log(items[0][0], items[0][1]);
 			} catch (e) {
 				// Restoring token failed
@@ -87,6 +98,18 @@ export default function AuthNavigator({ navigation }) {
 		};
 
 		bootstrapAsync();
+	}, []);
+
+	//profile context
+	const [profile, setProfile] = useState({
+		group_name: "",
+		description: "",
+		header_screen: "/",
+	});
+	useEffect(() => {
+		getProfile().then((res) => {
+			if (res.success) setProfile(res.profile);
+		});
 	}, []);
 
 	const authContext = React.useMemo(
@@ -120,83 +143,92 @@ export default function AuthNavigator({ navigation }) {
 
 	return (
 		<AuthContext.Provider value={authContext}>
-			<NavigationContainer>
-				<Stack.Navigator>
-					{state.isLoading ? (
-						// We haven't finished checking for the token yet
-						<Stack.Screen name="Splash" component={SplashScreen} />
-					) : state.userToken == null ? (
-						// No token found, user isn't signed in
-						<>
-							<Stack.Screen
-								name="Welcome"
-								component={WelcomeScreen}
-								options={{
-									headerShown: false,
-									title: "Welcome",
-								}}
-							/>
-							<Stack.Screen
-								name="Information"
-								component={InformationScreen}
-								options={{
-									headerShown: false,
-									title: "Welcome",
-								}}
-							/>
-							<Stack.Screen
-								name="SignUp"
-								component={SignUpScreen}
-								options={{
-									title: "Sign up",
+			<ProfileContext.Provider value={[profile, setProfile]}>
+				<NavigationContainer>
+					<Stack.Navigator>
+						{state.isLoading ? (
+							// We haven't finished checking for the token yet
+							<Stack.Screen name="Splash" component={SplashScreen} />
+						) : state.userToken == null ? (
+							// No token found, user isn't signed in
+							<>
+								<Stack.Screen
+									name="Welcome"
+									component={WelcomeScreen}
+									options={{
+										headerShown: false,
+										title: "Welcome",
+									}}
+								/>
+								<Stack.Screen
+									name="Information"
+									component={InformationScreen}
+									options={{
+										headerShown: false,
+										title: "Welcome",
+									}}
+								/>
+								<Stack.Screen
+									name="SignUp"
+									component={SignUpScreen}
+									options={{
+										title: "Sign up",
 
-									// When logging out, a pop animation feels intuitive
-									animationTypeForReplace: state.isSignout ? "pop" : "push",
-								}}
-							/>
-							<Stack.Screen
-								name="SignIn"
-								component={SignInScreen}
-								options={{
-									title: "Sign in",
-									// When logging out, a pop animation feels intuitive
-									animationTypeForReplace: state.isSignout ? "pop" : "push",
-								}}
-							/>
-						</>
-					) : state.userType == 0 ? (
-						<>
-							<Stack.Screen
-								name="PerformerHome"
-								component={PerformerHomeScreen}
-								options={{
-									headerShown: false,
-									title: "Performer Home",
-								}}
-							/>
-						</>
-					) : state.userType == 1 ? (
-						<>
-							<Stack.Screen
-								name="VenueHome"
-								component={VenueHomeScreen}
-								options={{
-									headerShown: false,
-									title: "Venue Home",
-								}}
-							/>
-						</>
-					) : (
-						<>
-							<Stack.Screen
-								options={{ headerShown: false }}
-								name="ChooseUserType"
-								component={ChooseUserType}
-							/>
-						</>
-					)}
-				</Stack.Navigator>
-			</NavigationContainer>
+										// When logging out, a pop animation feels intuitive
+										animationTypeForReplace: state.isSignout ? "pop" : "push",
+									}}
+								/>
+								<Stack.Screen
+									name="SignIn"
+									component={SignInScreen}
+									options={{
+										title: "Sign in",
+										// When logging out, a pop animation feels intuitive
+										animationTypeForReplace: state.isSignout ? "pop" : "push",
+									}}
+								/>
+							</>
+						) : state.userType == 0 ? (
+							<>
+								<Stack.Screen
+									name="PerformerHome"
+									component={PerformerHomeScreen}
+									options={{
+										headerShown: false,
+										title: "Performer Home",
+									}}
+								/>
+								<Stack.Screen
+									name="EditProfile"
+									component={EditProfile}
+									options={{
+										title: "Edit Profile",
+									}}
+								/>
+							</>
+						) : state.userType == 1 ? (
+							<>
+								<Stack.Screen
+									name="VenueHome"
+									component={VenueHomeScreen}
+									options={{
+										headerShown: false,
+										title: "Venue Home",
+									}}
+								/>
+							</>
+						) : (
+							<>
+								<Stack.Screen
+									options={{ headerShown: false }}
+									name="ChooseUserType"
+									component={ChooseUserType}
+								/>
+							</>
+						)}
+					</Stack.Navigator>
+				</NavigationContainer>
+			</ProfileContext.Provider>
 		</AuthContext.Provider>
 	);
 }
