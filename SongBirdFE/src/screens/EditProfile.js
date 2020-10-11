@@ -5,31 +5,32 @@ import { upload, updateProfile } from "../api/apiHandler";
 import { ScrollView } from "react-native-gesture-handler";
 import { SimpleAlert, SquareForm, RoundButton } from "../components/Form";
 import { ProfileContext } from "../context/context";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function EditProfile({ navigation }) {
 	const [profile, setProfile] = useContext(ProfileContext);
 	const [localProfile, setLocalProfile] = useState(profile);
+	const [editedImage, setEditedImage] = useState(false);
 	const [editedText, setEditedText] = useState(false);
-	const [editedImage, setEditedImage] = useState(null);
+	const [spinner, setSpinner] = useState(false);
 
 	const handleChoosePhoto = async () => {
-		let image = await ImagePicker.launchImageLibraryAsync({
+		const image = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
 			quality: 1,
 		});
-
 		if (!image.cancelled) {
 			const profile_copy = { ...profile };
 			profile_copy.header_screen = image.uri;
 			setLocalProfile(profile_copy);
 			setEditedImage(image);
-			console.log(editedImage);
 		}
 	};
 
 	return (
 		<>
 			<ScrollView>
+				<Spinner visible={spinner} textContent={"Loading..."} />
 				<View style={styles.container}>
 					<Image
 						source={{ uri: localProfile.header_screen }}
@@ -69,32 +70,42 @@ export default function EditProfile({ navigation }) {
 				<RoundButton
 					title="Save Changes"
 					onPress={() => {
-						const successfulUpdate = [true, true];
-						//make an api call with profileState
-						if (editedText) {
-							//set the context
-							setProfile({ ...localProfile });
+						const promise1 = new Promise((resolve, reject) => {
+							if (!editedText) {
+								resolve(true);
+								return;
+							}
 
-							updateProfile(profile).then((resp) => {
-								if (!resp.success) {
-									SimpleAlert(false, resp.message);
-									successfulUpdate[0] = false;
-								}
+							//set the context
+							setProfile(localProfile);
+							updateProfile(localProfile).then((resp) => {
+								if (!resp.success) resolve(false);
+								resolve(true);
 							});
-						}
-						//upload the image to the image server and db link
-						if (editedImage) {
-							setProfile({ ...localProfile });
-							upload(editedImage).then((result) => {
+						});
+
+						const promise2 = new Promise((resolve, reject) => {
+							if (!editedImage) {
+								console.log("fuckkk");
+								resolve(true);
+								return;
+							}
+							setProfile(localProfile);
+							upload(editedImage).then((resp) => {
 								//set the state or throw alert
-								if (!result.success) {
-									SimpleAlert(false, result.message);
-									successfulUpdate[1] = false;
-								}
+								if (!resp.success) resolve(false);
+
+								resolve(true);
 							});
-							if (successfulUpdate.every((value) => value === true))
+							resolve(true);
+						});
+
+						//throw up an alert if all where success or failed
+						Promise.all([promise1, promise2]).then((successArray) => {
+							if (successArray.every((v) => v === true))
 								SimpleAlert(true, "Successfully updated profile");
-						}
+							else SimpleAlert(false, "Could not update profile");
+						});
 					}}
 				/>
 			</View>
